@@ -3,9 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches:
-      - '*'
-    tags:
-      - '*'
+      - master
 
 jobs:
 
