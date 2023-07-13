@@ -53,4 +53,4 @@ COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certifica
 # this is the last commabd since it's never cached
 COPY --from=build /go/src/gtoken-webhook/.bin/github.com/doitintl/gtoken-webhook /gtoken-webhook
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
