@@ -45,7 +45,7 @@ FROM scratch
 
 ENV IMAGE_DOCKER ${IMAGE_DOCKER}
 
-COPY cmd/gtoken/entrypoint.sh entrypoint.sh
+COPY entrypoint.sh entrypoint.sh
 
 # copy CA certificates
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
