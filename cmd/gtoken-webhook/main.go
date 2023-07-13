@@ -30,9 +30,6 @@ import (
 
 /* #nosec */
 const (
-	// secretsInitContainer is the default gtoken container from which to pull the 'gtoken' binary.
-	gtokenInitImage = os.Setenv("IMAGE_DOCKER", "dockerld/gtoken")
-
 	// tokenVolumeName is the name of the volume where the generated id token will be stored
 	tokenVolumeName = "gtoken-volume"
 
@@ -453,7 +450,7 @@ func main() {
 				cli.StringFlag{
 					Name:  "image",
 					Usage: "Docker image with secrets-init utility on board",
-					Value: gtokenInitImage,
+					Value: os.Setenv("IMAGE_DOCKER", "dockerld/gtoken"),
 				},
 				cli.StringFlag{
 					Name:  "pull-policy",
