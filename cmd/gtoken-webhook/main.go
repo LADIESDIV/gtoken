@@ -450,7 +450,7 @@ func main() {
 				cli.StringFlag{
 					Name:  "image",
 					Usage: "Docker image with secrets-init utility on board",
-					Value: fmt.Printf("%+v", os.Setenv("IMAGE_DOCKER", "dockerld/gtoken")),
+					Value: fmt.Sprintf("%+v", os.Setenv("IMAGE_DOCKER", "dockerld/gtoken")),
 				},
 				cli.StringFlag{
 					Name:  "pull-policy",
