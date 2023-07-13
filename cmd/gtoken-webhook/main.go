@@ -31,7 +31,7 @@ import (
 /* #nosec */
 const (
 	// secretsInitContainer is the default gtoken container from which to pull the 'gtoken' binary.
-	gtokenInitImage = "dockerld/gtoken:v0.0.1"
+	gtokenInitImage = os.Setenv("IMAGE_DOCKER", "dockerld/gtoken")
 
 	// tokenVolumeName is the name of the volume where the generated id token will be stored
 	tokenVolumeName = "gtoken-volume"

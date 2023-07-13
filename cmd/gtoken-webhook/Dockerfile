@@ -26,6 +26,8 @@ RUN --mount=type=cache,target=/go/mod go mod download
 # copy sources
 COPY . .
 
+ENV IMAGE_DOCKER ${IMAGE_DOCKER}
+
 # build
 RUN make
 
