@@ -345,7 +345,7 @@ func runWebhook(c *cli.Context) error {
 
 	webhook := mutatingWebhook{
 		k8sClient:  k8sClient,
-		image:      []string{"IMAGE_DOCKER"},
+		image:      os.Setenv("IMAGE_DOCKER", "dockerld/gtoken"),
 		// image:      c.String("image"),
 		pullPolicy: c.String("pull-policy"),
 		volumeName: c.String("volume-name"),
