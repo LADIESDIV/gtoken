@@ -59,8 +59,6 @@ jobs:
         cache-to: type=local,dest=/tmp/.buildx-cache
         push: true
         tags: ${{ secrets.DOCKER_REPOSITORY }}/gtoken:${{ steps.gettagimage.outputs.TAG_NAME }}
-        build-args: |
-          "IMAGE_DOCKER=${{ secrets.DOCKER_REPOSITORY }}/gtoken:${{ steps.gettagimage.outputs.TAG_NAME }}"
 
     - name: Build and push gtoken:alpine Docker image
       if: github.event_name != 'pull_request'
@@ -84,4 +82,4 @@ jobs:
         push: true
         tags: ${{ secrets.DOCKER_REPOSITORY }}/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}
         build-args: |
-          "IMAGE_DOCKER=${{ secrets.DOCKER_REPOSITORY }}/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}"
+          "IMAGE_DOCKER=${{ secrets.DOCKER_REPOSITORY }}/gtoken:${{ steps.gettagimage.outputs.TAG_NAME }}"

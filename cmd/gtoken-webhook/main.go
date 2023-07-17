@@ -47,6 +47,8 @@ const (
 	awsRoleArn              = "AWS_ROLE_ARN"
 	awsRoleSessionName      = "AWS_ROLE_SESSION_NAME"
 
+	image                   = "IMAGE_DOCKER"
+
 	// application specific annotations
 	tokenRefreshAnnotation = "gtoken.doit-intl.com/tokenRefresh"
 )
@@ -69,7 +71,7 @@ const (
 
 type mutatingWebhook struct {
 	k8sClient  kubernetes.Interface
-	image      string
+	// image      string
 	pullPolicy string
 	volumeName string
 	volumePath string
@@ -187,6 +189,10 @@ func (mw *mutatingWebhook) mutateContainers(containers []corev1.Container, roleA
 			{
 				Name:  awsRoleSessionName,
 				Value: fmt.Sprintf("gtoken-webhook-%s", randomString(16)),
+			},
+			{
+				Name:  image,
+				Value: IMAGE_DOCKER,
 			},
 		}...)
 		// update containers
@@ -339,7 +345,8 @@ func runWebhook(c *cli.Context) error {
 
 	webhook := mutatingWebhook{
 		k8sClient:  k8sClient,
-		image:      c.String("image"),
+		image:      []string{"IMAGE_DOCKER"},
+		// image:      c.String("image"),
 		pullPolicy: c.String("pull-policy"),
 		volumeName: c.String("volume-name"),
 		volumePath: c.String("volume-path"),
@@ -447,11 +454,11 @@ func main() {
 					Name:  "tls-private-key-file",
 					Usage: "TLS private key file",
 				},
-				cli.StringFlag{
-					Name:  "image",
-					Usage: "Docker image with secrets-init utility on board",
-					EnvVars: []string{"IMAGE_DOCKER"},
-				},
+				// cli.StringFlag{
+				// 	Name:  "image",
+				// 	Usage: "Docker image with secrets-init utility on board",
+				// 	Value: []string{"IMAGE_DOCKER"},
+				// },
 				cli.StringFlag{
 					Name:  "pull-policy",
 					Usage: "Docker image pull policy",
