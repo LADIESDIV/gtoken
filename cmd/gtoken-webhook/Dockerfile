@@ -21,7 +21,7 @@ WORKDIR /go/src/gtoken-webhook
 # load dependency
 COPY go.mod .
 COPY go.sum .
-RUN --mount=type=cache,target=/go/mod go mod download
+RUN go mod download
 
 # copy sources
 COPY . .
@@ -45,12 +45,10 @@ FROM scratch
 
 ENV IMAGE_DOCKER ${IMAGE_DOCKER}
 
-COPY --from=build /go/src/gtoken-webhook/entrypoint.sh /entrypoint.sh
-
 # copy CA certificates
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 # this is the last commabd since it's never cached
 COPY --from=build /go/src/gtoken-webhook/.bin/github.com/doitintl/gtoken-webhook /gtoken-webhook
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/gtoken-webhook"]
