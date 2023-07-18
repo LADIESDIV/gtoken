@@ -47,8 +47,6 @@ const (
 	awsRoleArn              = "AWS_ROLE_ARN"
 	awsRoleSessionName      = "AWS_ROLE_SESSION_NAME"
 
-	image                   = "IMAGE_DOCKER"
-
 	// application specific annotations
 	tokenRefreshAnnotation = "gtoken.doit-intl.com/tokenRefresh"
 )
@@ -71,7 +69,6 @@ const (
 
 type mutatingWebhook struct {
 	k8sClient  kubernetes.Interface
-	image      string
 	pullPolicy string
 	volumeName string
 	volumePath string
@@ -341,7 +338,7 @@ func runWebhook(c *cli.Context) error {
 
 	webhook := mutatingWebhook{
 		k8sClient:  k8sClient,
-		image:      c.String("image"),
+		image:      c.GlobalString("image"),
 		pullPolicy: c.String("pull-policy"),
 		volumeName: c.String("volume-name"),
 		volumePath: c.String("volume-path"),
