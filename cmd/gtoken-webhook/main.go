@@ -69,6 +69,7 @@ const (
 
 type mutatingWebhook struct {
 	k8sClient  kubernetes.Interface
+	image      string
 	pullPolicy string
 	volumeName string
 	volumePath string
@@ -228,13 +229,13 @@ func (mw *mutatingWebhook) mutatePod(ctx context.Context, pod *corev1.Pod, ns st
 	if (initContainersMutated || containersMutated) && !dryRun {
 		// prepend gtoken init container (as first in it container)
 		pod.Spec.InitContainers = append([]corev1.Container{getGtokenContainer("generate-gcp-id-token",
-			c.GlobalString("image"), mw.pullPolicy, mw.volumeName, mw.volumePath, mw.tokenFile, false)}, pod.Spec.InitContainers...)
+			mw.image, mw.pullPolicy, mw.volumeName, mw.volumePath, mw.tokenFile, false)}, pod.Spec.InitContainers...)
 		logger.Debug("successfully prepended pod init containers to spec")
 		// append sidekick gtoken update container (as last container). Skip if autoRefresh is disabled
 
 		if !refreshTokenPresent || refresh {
 			pod.Spec.Containers = append(pod.Spec.Containers, getGtokenContainer("update-gcp-id-token",
-				c.GlobalString("image"), mw.pullPolicy, mw.volumeName, mw.volumePath, mw.tokenFile, true))
+				mw.image, mw.pullPolicy, mw.volumeName, mw.volumePath, mw.tokenFile, true))
 			logger.Debug("successfully prepended pod sidekick containers to spec")
 			// append empty gtoken volume
 		} else {
@@ -338,6 +339,7 @@ func runWebhook(c *cli.Context) error {
 
 	webhook := mutatingWebhook{
 		k8sClient:  k8sClient,
+		image:      c.GlobalString("IMAGE_DOCKER"),
 		pullPolicy: c.String("pull-policy"),
 		volumeName: c.String("volume-name"),
 		volumePath: c.String("volume-path"),
