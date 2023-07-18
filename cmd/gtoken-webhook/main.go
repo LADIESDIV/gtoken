@@ -190,10 +190,6 @@ func (mw *mutatingWebhook) mutateContainers(containers []corev1.Container, roleA
 				Name:  awsRoleSessionName,
 				Value: fmt.Sprintf("gtoken-webhook-%s", randomString(16)),
 			},
-			{
-				Name:  image,
-				Value: IMAGE_DOCKER,
-			},
 		}...)
 		// update containers
 		containers[i] = container
