@@ -71,7 +71,7 @@ const (
 
 type mutatingWebhook struct {
 	k8sClient  kubernetes.Interface
-	// image      string
+	image      string
 	pullPolicy string
 	volumeName string
 	volumePath string
@@ -341,8 +341,7 @@ func runWebhook(c *cli.Context) error {
 
 	webhook := mutatingWebhook{
 		k8sClient:  k8sClient,
-		image:      os.Setenv("IMAGE_DOCKER", "dockerld/gtoken"),
-		// image:      c.String("image"),
+		image:      c.String("image"),
 		pullPolicy: c.String("pull-policy"),
 		volumeName: c.String("volume-name"),
 		volumePath: c.String("volume-path"),
@@ -428,6 +427,12 @@ func main() {
 			Usage:  "produce log in JSON format: Logstash and Splunk friendly",
 			EnvVar: "LOG_JSON",
 		},
+		cli.StringFlag{
+			Name:  "image",
+			Usage: "Docker image with secrets-init utility on board",
+			Value: "dockerld/gtoken",
+			EnvVar: "IMAGE_DOCKER",
+		},
 	}
 	app.Commands = []cli.Command{
 		{
@@ -450,11 +455,6 @@ func main() {
 					Name:  "tls-private-key-file",
 					Usage: "TLS private key file",
 				},
-				// cli.StringFlag{
-				// 	Name:  "image",
-				// 	Usage: "Docker image with secrets-init utility on board",
-				// 	Value: []string{"IMAGE_DOCKER"},
-				// },
 				cli.StringFlag{
 					Name:  "pull-policy",
 					Usage: "Docker image pull policy",
