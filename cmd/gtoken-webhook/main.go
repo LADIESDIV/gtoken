@@ -425,12 +425,6 @@ func main() {
 			Usage:  "produce log in JSON format: Logstash and Splunk friendly",
 			EnvVar: "LOG_JSON",
 		},
-		cli.StringFlag{
-			Name:   "image",
-			Usage:  "Docker image with secrets-init utility on board",
-			Value:  "dockerld/gtoken",
-			EnvVar: "IMAGE_DOCKER",
-		},
 	}
 	app.Commands = []cli.Command{
 		{
@@ -472,6 +466,12 @@ func main() {
 					Name:  "token-file",
 					Usage: "token file name",
 					Value: tokenFileName,
+				},
+				cli.StringFlag{
+					Name:   "image",
+					Usage:  "Docker image with secrets-init utility on board",
+					Value:  "dockerld/gtoken",
+					EnvVar: "IMAGE_DOCKER",
 				},
 			},
 			Usage:       "mutation admission webhook",
