@@ -21,7 +21,7 @@ WORKDIR /go/src/gtoken-webhook
 # load dependency
 COPY go.mod .
 COPY go.sum .
-RUN go mod download
+RUN  --mount=type=cache,target=/go/mod go mod download
 
 # copy sources
 COPY . .
@@ -41,7 +41,7 @@ RUN apk --update add ca-certificates
 #
 # ------ gtoken release Docker image ------
 #
-FROM scratch
+FROM alpine
 
 ENV IMAGE_DOCKER ${IMAGE_DOCKER}
 
