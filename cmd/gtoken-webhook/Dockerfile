@@ -27,7 +27,7 @@ RUN  --mount=type=cache,target=/go/mod go mod download
 COPY . .
 
 ARG IMAGE_DOCKER
-ENV IMAGE_DOCKER =$IMAGE_DOCKER
+ENV IMAGE_DOCKER $IMAGE_DOCKER
 
 # build
 RUN make
@@ -42,10 +42,10 @@ RUN apk --update add ca-certificates
 #
 # ------ gtoken release Docker image ------
 #
-FROM alpine
+FROM scratch
 
 ARG IMAGE_DOCKER
-ENV IMAGE_DOCKER =$IMAGE_DOCKER
+ENV IMAGE_DOCKER $IMAGE_DOCKER
 
 # copy CA certificates
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
