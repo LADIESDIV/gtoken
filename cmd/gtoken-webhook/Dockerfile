@@ -43,7 +43,7 @@ RUN apk --update add ca-certificates
 #
 FROM alpine
 
-ENV IMAGE_DOCKER ${IMAGE_DOCKER}
+ARG IMAGE_DOCKER
 
 # copy CA certificates
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
