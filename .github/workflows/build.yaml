@@ -37,12 +37,11 @@ jobs:
         echo "go to release"
         echo "email=$(git log -n 1 --pretty=format:%ae)" >> $GITHUB_OUTPUT
         echo "name=$(git log -n 1 --pretty=format:%an)" >> $GITHUB_OUTPUT
-
     - name: Deploy Image
       if: "!contains(github.event.head_commit.message, 'chore')"
       run: |
         git fetch
-        git checkout $GITHUB_REF_NAME
+        git checkout --track origin/$GITHUB_REF_NAME
         cd deployment
         sed -ri 's/^(\s*)(image\s*:.*$)/\1image: '"${{ steps.gettagimage.outputs.DOCKER_REPOSITORY }}\/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}"'/' deployment.yaml
         cd ..
@@ -50,7 +49,7 @@ jobs:
         if [[ ${{ github.event_name }} = 'release' ]]; then git checkout -b chore/changeversion; git push origin chore/changeversion; gh pr create --title "Chore: change version image in deployment" --body "chore: change version image in deployment" -B "master"; else git push origin $GITHUB_REF_NAME; fi;
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        
+
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
