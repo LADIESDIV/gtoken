@@ -96,6 +96,7 @@ jobs:
     - name: Deploy Image
       if: "!contains(github.event.head_commit.message, 'chore')"
       run: |
+        git checkout $GITHUB_REF_NAME
         cd deployment
         sed -ri 's/^(\s*)(image\s*:.*$)/\1image: '"${{ steps.gettagimage.outputs.DOCKER_REPOSITORY }}\/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}"'/' deployment.yaml
         cd ..
