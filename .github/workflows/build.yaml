@@ -25,6 +25,7 @@ jobs:
       run: |
         if [[ ${{ github.event_name }} = 'release' ]]; then TAG_NAME=$GITHUB_REF_SLUG; else TAG_NAME=$GITHUB_HEAD_REF_SLUG-${GIT_SHA:0:7}-$(date +%s); fi;
         echo "TAG_NAME=$TAG_NAME" >> $GITHUB_OUTPUT
+        echo "DOCKER_REPOSITORY=${{ secrets.DOCKER_REPOSITORY }}" >> $GITHUB_OUTPUT
       id: gettagimage
     - name: check tag
       run: echo ${{ steps.gettagimage.outputs.TAG_NAME }}
@@ -32,7 +33,7 @@ jobs:
       if: "!contains(github.event.head_commit.message, 'chore')"
       run: |
         cd deployment
-        sed -ri 's/^(\s*)(image\s*:.*$)/\1image: '"toto"'/' deployment.yaml
+        sed -ri 's/^(\s*)(image\s*:.*$)/\1image: '"${{ steps.gettagimage.outputs.DOCKER_REPOSITORY }}/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}"'/' deployment.yaml
         cd ..
         git config --global user.email "${{ steps.inst.outputs.email }}" && git config --global user.name "${{ steps.inst.outputs.name }}" && git add . && git commit -m "feat(chore): change version ${{ secrets.DOCKER_REPOSITORY }}/gtoken(-webhook) image"
         if [[ ${{ github.event_name }} = 'release' ]]; then git checkout -b chore/changeversion; git push origin chore/changeversion; gh pr create --title "Chore: change version image in deployment" --body "chore: change version image in deployment" -B "master"; else git push origin $GITHUB_REF_NAME; fi;
