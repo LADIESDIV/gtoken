@@ -40,13 +40,12 @@ jobs:
     - name: Deploy Image
       if: "!contains(github.event.head_commit.message, 'chore')"
       run: |
-        git fetch
-        git checkout --track origin/$GITHUB_REF_NAME
+        git checkout $GITHUB_HEAD_REF
         cd deployment
         sed -ri 's/^(\s*)(image\s*:.*$)/\1image: '"${{ steps.gettagimage.outputs.DOCKER_REPOSITORY }}\/gtoken-webhook:${{ steps.gettagimage.outputs.TAG_NAME }}"'/' deployment.yaml
         cd ..
         git config --global user.email "${{ steps.inst.outputs.email }}" && git config --global user.name "${{ steps.inst.outputs.name }}" && git add . && git commit -m "feat(chore): change version ${{ secrets.DOCKER_REPOSITORY }}/gtoken(-webhook) image"
-        if [[ ${{ github.event_name }} = 'release' ]]; then git checkout -b chore/changeversion; git push origin chore/changeversion; gh pr create --title "Chore: change version image in deployment" --body "chore: change version image in deployment" -B "master"; else git push origin $GITHUB_REF_NAME; fi;
+        if [[ ${{ github.event_name }} = 'release' ]]; then git checkout -b chore/changeversion; git push origin chore/changeversion; gh pr create --title "Chore: change version image in deployment" --body "chore: change version image in deployment" -B "master"; else git push origin $GITHUB_HEAD_REF; fi;
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
