@@ -51,6 +51,10 @@ The AWS SDK will automatically make the corresponding `AssumeRoleWithWebIdentity
 
 The `gtoken-webhook` can be configured to skip injection for all Pods in the specific Namespace by adding the `admission.gtoken/ignore` label to the Namespace.
 
+### skip refresh token when pod exit (for cronjob, job per example)
+
+The refresh can be disabled by adding `gtoken.doit-intl.com/tokenRefresh: "false"` annotation to the service account objects.
+
 ## `gtoken-webhook` deployment
 
 1. Create a new `gtoken` namespace:
@@ -115,7 +119,7 @@ First, create a Kubernetes Service Account to be used with the `gtoken-webhook`:
 kubectl create -f deployment/service-account.yaml
 ```
 
-Once the secret is created, we can create deployment and service. These are standard Kubernetes deployment and service resources. Up until this point we’ve produced nothing but an HTTP server that’s accepting requests through a service on port 443:
+Once the secret is created, we can create deployment and service. These are standard Kubernetes deployment and service resources. You can change image if you fork repo and build your image. Up until this point we’ve produced nothing but an HTTP server that’s accepting requests through a service on port 443:
 
 ```sh
 kubectl create -f deployment/deployment.yaml

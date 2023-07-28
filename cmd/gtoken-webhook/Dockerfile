@@ -21,10 +21,13 @@ WORKDIR /go/src/gtoken-webhook
 # load dependency
 COPY go.mod .
 COPY go.sum .
-RUN --mount=type=cache,target=/go/mod go mod download
+RUN  --mount=type=cache,target=/go/mod go mod download
 
 # copy sources
 COPY . .
+
+ARG IMAGE_DOCKER
+ENV IMAGE_DOCKER $IMAGE_DOCKER
 
 # build
 RUN make
@@ -40,6 +43,9 @@ RUN apk --update add ca-certificates
 # ------ gtoken release Docker image ------
 #
 FROM scratch
+
+ARG IMAGE_DOCKER
+ENV IMAGE_DOCKER $IMAGE_DOCKER
 
 # copy CA certificates
 COPY --from=certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
