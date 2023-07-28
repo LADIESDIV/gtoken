@@ -2,6 +2,7 @@ name: Docker Image CI
 
 on:
   release:
+    types: [published]
   pull_request:
 
 jobs:
