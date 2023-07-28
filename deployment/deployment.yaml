@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: gtoken-webhook
-          image: dockerld/gtoken-webhook:v0.0.1
+          image: dockerld/gtoken-webhook:feat-clearimageuse--1690529091
           imagePullPolicy: Always
           resources:
             requests:
